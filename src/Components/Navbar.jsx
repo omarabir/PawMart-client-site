@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
 import { BiMoon } from "react-icons/bi";
 import { PiSun } from "react-icons/pi";
 import { Link, NavLink } from "react-router";
+import { AuthContext } from "../Context/AuthContext";
 
 const Navbar = () => {
+  const { user } = useContext(AuthContext);
   const navLinks = (
     <>
       <li>
@@ -22,6 +24,34 @@ const Navbar = () => {
           Pets & Supplies
         </NavLink>
       </li>
+      {user && (
+        <>
+          <li>
+            <NavLink
+              to="/add-listing"
+              className={({ isActive }) => (isActive ? "active" : "")}
+            >
+              Add Listing
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
+              to="/my-listings"
+              className={({ isActive }) => (isActive ? "active" : "")}
+            >
+              My Listings
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
+              to="/my-orders"
+              className={({ isActive }) => (isActive ? "active" : "")}
+            >
+              My Orders
+            </NavLink>
+          </li>
+        </>
+      )}
     </>
   );
 
@@ -42,7 +72,6 @@ const Navbar = () => {
 
   return (
     <div className="navbar bg-base-100 shadow-md px-4 sticky top-0 z-50 mb-10">
-      {/* Navbar Start */}
       <div className="navbar-start">
         <div className="dropdown">
           <label tabIndex={0} className="btn btn-ghost lg:hidden">
@@ -61,6 +90,7 @@ const Navbar = () => {
               />
             </svg>
           </label>
+
           <ul
             tabIndex={0}
             className="menu menu-sm dropdown-content mt-3 z-50 p-2 shadow bg-base-100 rounded-box w-52"
@@ -88,14 +118,46 @@ const Navbar = () => {
           <BiMoon className="swap-off fill-current w-5 h-5" />
         </label>
 
-        <div className="hidden sm:flex gap-2">
-          <Link to="/login" className="btn btn-outline btn-primary">
-            Login
-          </Link>
-          <Link to="/register" className="btn btn-primary">
-            Register
-          </Link>
-        </div>
+        {user ? (
+          <div className="dropdown dropdown-end">
+            <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
+              <div className="w-10 rounded-full">
+                <img
+                  src={
+                    user.photoURL || `https://i.pravatar.cc/150?u=${user.uid}`
+                  }
+                  alt="User avatar"
+                />
+              </div>
+            </label>
+            <ul
+              tabIndex={0}
+              className="menu menu-sm dropdown-content mt-3 z-1 p-2 shadow bg-base-100 rounded-box w-52"
+            >
+              <li className="p-2 font-semibold">
+                {user.displayName || "Profile"}
+              </li>
+              <li>
+                <button className="btn btn-ghost justify-start">Logout</button>
+              </li>
+            </ul>
+          </div>
+        ) : (
+          <>
+            <Link
+              to="/login"
+              className="btn btn-outline btn-primary hidden sm:inline-flex"
+            >
+              Login
+            </Link>
+            <Link
+              to="/register"
+              className="btn btn-primary hidden sm:inline-flex"
+            >
+              Register
+            </Link>
+          </>
+        )}
       </div>
     </div>
   );
