@@ -1,8 +1,41 @@
-import React from "react";
+import React, { useContext } from "react";
 import { FaGoogle } from "react-icons/fa";
-import { Link } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
+import { AuthContext } from "../Context/AuthContext";
+import toast from "react-hot-toast";
 
 const Login = () => {
+  const { signInUser, signInWithGoogle } = useContext(AuthContext);
+  const location = useLocation();
+  const navigate = useNavigate();
+  const handleLogIn = (event) => {
+    event.preventDefault();
+    const email = event.target.email.value;
+    const password = event.target.password.value;
+
+    signInUser(email, password)
+      .then((result) => {
+        toast.success("User logged in successfully!");
+        event.target.reset();
+        navigate(location.state || "/");
+      })
+      .catch((error) => {
+        toast.error(error.message);
+      });
+  };
+
+  const handleGoogleSignIn = () => {
+    signInWithGoogle()
+      .then((result) => {
+        toast.success("User created successfully!");
+        console.log(result.user);
+        navigate("/");
+      })
+      .catch((error) => {
+        console.log(error);
+        toast.error(error.message);
+      });
+  };
   return (
     <div className="hero min-h-screen bg-base-200">
       <div className="hero-content flex justify-center flex-col">
@@ -15,7 +48,7 @@ const Login = () => {
           </p>
         </div>
         <div className="card shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
-          <form className="card-body">
+          <form onSubmit={handleLogIn} className="card-body">
             <div className="form-control">
               <label className="label">
                 <span className="label-text">Email</span>
@@ -47,7 +80,11 @@ const Login = () => {
               </button>
             </div>
             <div className="divider">OR</div>
-            <button type="button" className="btn btn-outline">
+            <button
+              onClick={handleGoogleSignIn}
+              type="button"
+              className="btn btn-outline"
+            >
               <FaGoogle />
               Login with Google
             </button>
