@@ -1,7 +1,27 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router";
+import { AuthContext } from "../Context/AuthContext";
+import toast from "react-hot-toast";
 
 const Register = () => {
+  const { createUser } = useContext(AuthContext);
+  const handleRegister = (e) => {
+    e.preventDefault();
+    const displayName = e.target.displayName.value;
+    const photoURL = e.target.photoURL.value;
+    const email = e.target.email.value;
+    const password = e.target.password.value;
+    createUser(email, password)
+      .then((result) => {
+        toast.success("User created successfully!");
+        console.log(result.user);
+      })
+      .catch((error) => {
+        toast.error(error.message);
+        console.log(error);
+      });
+  };
+
   return (
     <div className="hero min-h-screen bg-base-200 py-10">
       <div className="hero-content flex flex-col justify-center">
@@ -14,7 +34,7 @@ const Register = () => {
           </p>
         </div>
         <div className="card shrink-0 w-full max-w-sm shadow-xl bg-base-100">
-          <form className="card-body">
+          <form onSubmit={handleRegister} className="card-body">
             <div className="form-control">
               <label className="label">
                 <span className="label-text">Name</span>
@@ -24,6 +44,7 @@ const Register = () => {
                 placeholder="Your Name"
                 className="input input-bordered"
                 required
+                name="displayName"
               />
             </div>
             <div className="form-control">
@@ -35,7 +56,7 @@ const Register = () => {
                 placeholder="email"
                 className="input input-bordered"
                 required
-                value=""
+                name="email"
               />
             </div>
             <div className="form-control">
@@ -47,7 +68,7 @@ const Register = () => {
                 placeholder="password"
                 className="input input-bordered"
                 required
-                value=""
+                name="password"
               />
             </div>
             <div className="form-control">
@@ -58,7 +79,7 @@ const Register = () => {
                 type="url"
                 placeholder="https://example.com/photo.jpg"
                 className="input input-bordered"
-                value=""
+                name="photoURL"
               />
             </div>
 
