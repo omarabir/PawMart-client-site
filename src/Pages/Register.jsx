@@ -1,10 +1,12 @@
 import React, { useContext } from "react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { AuthContext } from "../Context/AuthContext";
 import toast from "react-hot-toast";
+import { FaGoogle } from "react-icons/fa";
 
 const Register = () => {
-  const { createUser } = useContext(AuthContext);
+  const { createUser, signInWithGoogle } = useContext(AuthContext);
+  const navigate = useNavigate();
   const validatePassword = (password) => {
     if (!/[A-Z]/.test(password)) {
       return "Password must contain at least 1 uppercase letter.";
@@ -36,6 +38,19 @@ const Register = () => {
       .catch((error) => {
         toast.error(error.message);
         console.log(error);
+      });
+  };
+
+  const handleGoogleSignIn = () => {
+    signInWithGoogle()
+      .then((result) => {
+        toast.success("User created successfully!");
+        console.log(result.user);
+        navigate("/");
+      })
+      .catch((error) => {
+        console.log(error);
+        toast.error(error.message);
       });
   };
 
@@ -100,13 +115,18 @@ const Register = () => {
               />
             </div>
 
-            <div className="form-control mt-6 mx-auto">
-              <button className="btn btn-primary" type="submit">
+            <div className="form-control mt-6 mx-auto w-full">
+              <button className="btn btn-primary w-full" type="submit">
                 Register
               </button>
             </div>
             <div className="divider">OR</div>
-            <button type="button" className="btn btn-outline">
+            <button
+              onClick={handleGoogleSignIn}
+              type="button"
+              className="btn btn-outline flex justify-center items-center"
+            >
+              <FaGoogle />
               Sign up with Google
             </button>
             <p className="text-center text-sm mt-4">
