@@ -127,11 +127,13 @@ const Register = () => {
               className="btn btn-outline flex justify-center items-center"
             >
               <FaGoogle />
-              Sign up with Google
+              Login with Google
             </button>
             <p className="text-center text-sm mt-4">
               Already have an account?{" "}
-              <Link className="link link-primary">Login here</Link>
+              <Link to="/login" className="link link-primary">
+                Login here
+              </Link>
             </p>
           </form>
         </div>
