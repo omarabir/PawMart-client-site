@@ -6,6 +6,7 @@ import Login from "../Pages/Login";
 import PetSupplies from "../Pages/PetSupplies";
 import AddListing from "../Pages/AddListing";
 import PrivateRoute from "./PrivateRoute";
+import MyListings from "../Pages/MyListing";
 
 export const router = createBrowserRouter([
   {
@@ -27,6 +28,14 @@ export const router = createBrowserRouter([
         element: (
           <PrivateRoute>
             <AddListing></AddListing>
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/my-listings",
+        element: (
+          <PrivateRoute>
+            <MyListings></MyListings>
           </PrivateRoute>
         ),
       },
