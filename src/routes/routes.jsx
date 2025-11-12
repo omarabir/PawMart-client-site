@@ -5,6 +5,7 @@ import Register from "../Pages/Register";
 import Login from "../Pages/Login";
 import PetSupplies from "../Pages/PetSupplies";
 import AddListing from "../Pages/AddListing";
+import PrivateRoute from "./PrivateRoute";
 
 export const router = createBrowserRouter([
   {
@@ -22,9 +23,12 @@ export const router = createBrowserRouter([
       },
       {
         path: "/add-listing",
-        loader: () =>
-          fetch("http://localhost:3000/listings").then((res) => res.json()),
-        element: <AddListing></AddListing>,
+        loader: () => fetch("http://localhost:3000/listings"),
+        element: (
+          <PrivateRoute>
+            <AddListing></AddListing>
+          </PrivateRoute>
+        ),
       },
       {
         path: "/register",

@@ -1,13 +1,19 @@
 import React, { useContext } from "react";
 import { FaGoogle } from "react-icons/fa";
-import { Link, useLocation, useNavigate } from "react-router";
+import { Link, Navigate, useLocation, useNavigate } from "react-router";
 import { AuthContext } from "../Context/AuthContext";
 import toast from "react-hot-toast";
 
 const Login = () => {
-  const { signInUser, signInWithGoogle } = useContext(AuthContext);
+  const { signInUser, signInWithGoogle, user } = useContext(AuthContext);
   const location = useLocation();
+  const from = location.state || "/";
   const navigate = useNavigate();
+
+  if (user) {
+    return <Navigate to="/"></Navigate>;
+  }
+
   const handleLogIn = (event) => {
     event.preventDefault();
     const email = event.target.email.value;
@@ -17,7 +23,7 @@ const Login = () => {
       .then((result) => {
         toast.success("User logged in successfully!");
         event.target.reset();
-        navigate(location.state || "/");
+        navigate(from);
       })
       .catch((error) => {
         toast.error(error.message);
@@ -29,7 +35,7 @@ const Login = () => {
       .then((result) => {
         toast.success("User created successfully!");
         console.log(result.user);
-        navigate("/");
+        navigate(from);
       })
       .catch((error) => {
         console.log(error);
