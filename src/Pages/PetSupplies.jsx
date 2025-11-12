@@ -6,10 +6,9 @@ import Spinner from "../Components/Spinner";
 
 const PetSupplies = () => {
   const listingData = useLoaderData();
-
   const { loading } = useContext(AuthContext);
-
   const listings = Array.isArray(listingData) ? listingData : [];
+  const categories = [...new Set(listings.map((listing) => listing.category))];
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -22,8 +21,13 @@ const PetSupplies = () => {
           <label className="label">
             <span className="label-text">Filter by Category</span>
           </label>
-          <select className="select select-bordered" value="">
+          <select className="select select-bordered">
             <option value="All">All Categories</option>
+            {categories.map((category) => (
+              <option key={category} value={category}>
+                {category}
+              </option>
+            ))}
           </select>
         </div>
         <div className="form-control flex flex-col   w-full md:w-1/3">
