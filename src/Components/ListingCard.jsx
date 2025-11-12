@@ -35,7 +35,10 @@ const ListingCard = ({ listing }) => {
             : `$${listing.price}`}
         </p>
         <div className="card-actions justify-end">
-          <Link to={`/listing/${listing._id}`} className="btn btn-primary">
+          <Link
+            to={`/listing-details/${listing._id}`}
+            className="btn btn-primary"
+          >
             See Details
           </Link>
         </div>

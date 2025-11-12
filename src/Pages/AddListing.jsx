@@ -45,7 +45,7 @@ const AddListing = () => {
         <form onSubmit={handleAddListing} className="card-body">
           <div className="form-control">
             <label className="label">
-              <span className="label-text">Product/Pet Name</span>
+              <span className="label-text mr-4">Product/Pet Name</span>
             </label>
             <input
               type="text"
@@ -84,7 +84,7 @@ const AddListing = () => {
 
           <div className="form-control">
             <label className="label">
-              <span className="label-text">Location</span>
+              <span className="label-text mr-4">Location</span>
             </label>
             <input
               type="text"
@@ -96,7 +96,7 @@ const AddListing = () => {
 
           <div className="form-control">
             <label className="label">
-              <span className="label-text">Image URL</span>
+              <span className="label-text mr-4">Image URL</span>
             </label>
             <input
               type="url"
@@ -108,7 +108,7 @@ const AddListing = () => {
 
           <div className="form-control">
             <label className="label">
-              <span className="label-text">Description</span>
+              <span className="label-text mr-4">Description</span>
             </label>
             <textarea
               name="description"

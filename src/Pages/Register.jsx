@@ -1,12 +1,16 @@
 import React, { useContext } from "react";
-import { Link, useNavigate } from "react-router";
+import { Link, Navigate, useLocation, useNavigate } from "react-router";
 import { AuthContext } from "../Context/AuthContext";
 import toast from "react-hot-toast";
 import { FaGoogle } from "react-icons/fa";
 
 const Register = () => {
-  const { createUser, signInWithGoogle } = useContext(AuthContext);
+  const { createUser, signInWithGoogle, user, updateUserProfile, setUser } =
+    useContext(AuthContext);
   const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state || "/";
+
   const validatePassword = (password) => {
     if (!/[A-Z]/.test(password)) {
       return "Password must contain at least 1 uppercase letter.";
@@ -19,6 +23,9 @@ const Register = () => {
     }
     return null;
   };
+  if (user) {
+    return <Navigate to="/"></Navigate>;
+  }
   const handleRegister = (e) => {
     e.preventDefault();
     const displayName = e.target.displayName.value;
@@ -32,8 +39,12 @@ const Register = () => {
     }
     createUser(email, password)
       .then((result) => {
-        toast.success("User created successfully!");
-        console.log(result.user);
+        updateUserProfile(displayName, photoURL)
+          .then(() => {
+            setUser({ ...result.user, displayName, photoURL });
+            toast.success("User created successfully!");
+            navigate(from, { replace: true });
+          });
       })
       .catch((error) => {
         toast.error(error.message);

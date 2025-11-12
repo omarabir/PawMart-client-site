@@ -7,6 +7,7 @@ import PetSupplies from "../Pages/PetSupplies";
 import AddListing from "../Pages/AddListing";
 import PrivateRoute from "./PrivateRoute";
 import MyListings from "../Pages/MyListing";
+import ListingDetails from "../Pages/ListingDetails";
 
 export const router = createBrowserRouter([
   {
@@ -30,6 +31,16 @@ export const router = createBrowserRouter([
             <AddListing></AddListing>
           </PrivateRoute>
         ),
+      },
+      {
+        path: "/listing-details/:id",
+        element: (
+          <PrivateRoute>
+            <ListingDetails></ListingDetails>
+          </PrivateRoute>
+        ),
+        loader: ({ params }) =>
+          fetch(`http://localhost:3000/listings/${params.id}`),
       },
       {
         path: "/my-listings",
