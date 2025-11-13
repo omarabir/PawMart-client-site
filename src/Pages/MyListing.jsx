@@ -1,176 +1,222 @@
 import React, { useEffect, useState, useContext } from "react";
 import { AuthContext } from "../Context/AuthContext";
 import { ClipLoader } from "react-spinners";
+import toast, { Toaster } from "react-hot-toast";
 import Swal from "sweetalert2";
+
+const categoryOptions = [
+  "All Categories",
+  "Accessories",
+  "Foods",
+  "Care Products",
+  "Pets",
+];
 
 const MyListings = () => {
   const { user } = useContext(AuthContext);
   const [myListings, setMyListings] = useState([]);
   const [loader, setLoader] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingListing, setEditingListing] = useState(null);
+
+  const fetchMyListings = async () => {
+    try {
+      setLoader(true);
+      const res = await fetch(
+        `http://localhost:3000/my-listings?email=${user?.email}`
+      );
+      const data = await res.json();
+      setMyListings(data);
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to load listings");
+    } finally {
+      setLoader(false);
+    }
+  };
 
   useEffect(() => {
-    if (!user?.email) return;
+    if (user?.email) fetchMyListings();
+  }, [user]);
 
-    fetch(`http://localhost:3000/my-listings?email=${user.email}`)
-      .then((res) => res.json())
-      .then((data) => {
-        setMyListings(data);
-        setLoader(false);
-      })
-      .catch((error) => {
-        console.error(error);
-        Swal.fire("Error", "Failed to load your listings", "error");
-        setLoader(false);
-      });
-  }, [user?.email]);
+  const handleEdit = (listing) => {
+    setEditingListing(listing);
+    setIsModalOpen(true);
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setEditingListing((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSaveChanges = async () => {
+    try {
+      const res = await fetch(
+        `http://localhost:3000/listings/${editingListing._id}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(editingListing),
+        }
+      );
+      const data = await res.json();
+
+      if (res.ok && data.success) {
+        toast.success("Listing updated successfully!");
+        setIsModalOpen(false);
+        fetchMyListings();
+      } else {
+        toast.error(data.message || "Update failed");
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("Something went wrong");
+    }
+  };
 
   const handleDelete = async (id) => {
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085f6",
+      confirmButtonText: "Yes, delete it!",
+      cancelButtonText: "Cancel",
+    });
+
+    if (!result.isConfirmed) return;
+
     try {
-      const result = await Swal.fire({
-        title: "Are you sure?",
-        text: "You won't be able to revert this!",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#d33",
-        cancelButtonColor: "#3085f6",
-        confirmButtonText: "Yes, delete it!",
-        cancelButtonText: "Cancel",
-      });
-
-      if (!result.isConfirmed) return;
-
-      // Delete on server first
       const res = await fetch(`http://localhost:3000/listings/${id}`, {
         method: "DELETE",
       });
       const data = await res.json();
 
       if (data.deletedCount > 0) {
-        // Success → update UI
         setMyListings((prev) => prev.filter((item) => item._id !== id));
         Swal.fire("Deleted!", "Your listing has been deleted.", "success");
       } else {
         Swal.fire("Error!", "Delete failed.", "error");
       }
-    } catch (err) {
-      console.error(err);
-      Swal.fire("Error!", "Delete failed.", "error");
+    } catch (error) {
+      console.error(error);
+      Swal.fire("Error!", "Something went wrong while deleting.", "error");
     }
   };
 
-  if (loader) {
-    return (
-      <div className="fixed inset-0 flex justify-center items-center bg-white/70 z-50">
-        <ClipLoader size={50} color="#3B82F6" />
-      </div>
-    );
-  }
-
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold text-center mb-8">My Listings</h1>
+    <div className="p-4">
+      <h2 className="text-2xl font-bold mb-4 text-center">My Listings</h2>
 
-      <div className="hidden md:block overflow-x-auto">
-        <table className="table w-full  rounded-lg">
-          <thead className="bg-gray-100">
-            <tr>
-              <th>Name</th>
-              <th>Category</th>
-              <th>Price</th>
-              <th>Location</th>
-              <th className="text-center">Actions</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            {myListings.length === 0 ? (
+      {loader ? (
+        <div className="flex justify-center items-center h-40">
+          <ClipLoader size={50} />
+        </div>
+      ) : myListings.length === 0 ? (
+        <p className="text-center text-gray-500">No listings found.</p>
+      ) : (
+        <div className="overflow-x-auto">
+          <table className="min-w-full text-sm md:text-base border border-gray-300">
+            <thead className="bg-gray-100">
               <tr>
-                <td
-                  colSpan="5"
-                  className="text-center py-6 text-gray-500 italic"
-                >
-                  You have not created any listings yet.
-                </td>
+                <th className=" px-4 py-2">Name</th>
+                <th className=" px-4 py-2">Category</th>
+                <th className=" px-4 py-2">Price</th>
+                <th className=" px-4 py-2">Location</th>
+                <th className=" px-4 py-2">Actions</th>
               </tr>
-            ) : (
-              myListings.map((listing) => (
-                <tr key={listing._id}>
-                  <td className="flex items-center gap-3">
-                    <img
-                      src={listing.image}
-                      alt={listing.name}
-                      className="w-10 h-10 rounded-full object-cover"
-                    />
-                    <span className="font-semibold">{listing.name}</span>
-                  </td>
-                  <td>{listing.category}</td>
-                  <td>${listing.price}</td>
-                  <td>{listing.location}</td>
-                  <td className="flex gap-3 justify-center">
-                    <button className="btn btn-sm btn-outline btn-info">
-                      Update
+            </thead>
+            <tbody>
+              {myListings.map((listing) => (
+                <tr key={listing._id} className="text-center">
+                  <td className=" px-4 py-2">{listing.name}</td>
+                  <td className=" px-4 py-2">{listing.category}</td>
+                  <td className=" px-4 py-2">${listing.price}</td>
+                  <td className=" px-4 py-2">{listing.location}</td>
+                  <td className=" px-4 py-2 flex justify-center gap-2">
+                    <button
+                      onClick={() => handleEdit(listing)}
+                      className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
+                    >
+                      Edit
                     </button>
                     <button
                       onClick={() => handleDelete(listing._id)}
-                      className="btn btn-sm bg-red-500 text-white hover:bg-red-600"
+                      className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
                     >
                       Delete
                     </button>
                   </td>
                 </tr>
-              ))
-            )}
-          </tbody>
-        </table>
-      </div>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
 
-      {/* Mobile view */}
-      <div className="md:hidden space-y-4 mt-6">
-        {myListings.length === 0 ? (
-          <p className="text-center text-gray-500">
-            You have not created any listings yet.
-          </p>
-        ) : (
-          myListings.map((listing) => (
-            <div
-              key={listing._id}
-              className="card bg-base-100 shadow-md border p-4 rounded-lg"
-            >
-              <div className="flex items-center gap-4">
-                <img
-                  src={listing.image}
-                  alt={listing.name}
-                  className="w-16 h-16 rounded-xl object-cover"
-                />
-                <div>
-                  <h2 className="font-bold text-lg">{listing.name}</h2>
-                  <p className="text-sm text-gray-500">{listing.category}</p>
-                </div>
-              </div>
-              <div className="mt-3">
-                <p className="text-sm">
-                  <span className="font-semibold">Price:</span> ${listing.price}
-                </p>
-                <p className="text-sm">
-                  <span className="font-semibold">Location:</span>{" "}
-                  {listing.location}
-                </p>
-              </div>
-              <div className="flex justify-end gap-2 mt-4">
-                <button className="btn btn-sm btn-outline btn-info">
-                  Update
-                </button>
-                <button
-                  onClick={() => handleDelete(listing._id)}
-                  className="btn btn-sm bg-red-500 text-white hover:bg-red-600"
-                >
-                  Delete
-                </button>
-              </div>
+      {isModalOpen && editingListing && (
+        <div className=" fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-96">
+            <h3 className="text-lg font-bold mb-4 text-center">Edit Listing</h3>
+
+            <div className="space-y-3">
+              <input
+                type="text"
+                name="name"
+                value={editingListing.name}
+                onChange={handleChange}
+                className="w-full border rounded px-3 py-2"
+                placeholder="Name"
+              />
+              <select
+                name="category"
+                value={editingListing.category}
+                onChange={handleChange}
+                className="w-full border rounded px-3 py-2"
+              >
+                {categoryOptions.map((cat) => (
+                  <option key={cat} value={cat}>
+                    {cat}
+                  </option>
+                ))}
+              </select>
+              <input
+                type="number"
+                name="price"
+                value={editingListing.price}
+                onChange={handleChange}
+                className="w-full border rounded px-3 py-2"
+                placeholder="Price"
+              />
+              <input
+                type="text"
+                name="location"
+                value={editingListing.location}
+                onChange={handleChange}
+                className="w-full border rounded px-3 py-2"
+                placeholder="Location"
+              />
             </div>
-          ))
-        )}
-      </div>
+
+            <div className="flex justify-end gap-3 mt-5">
+              <button
+                onClick={() => setIsModalOpen(false)}
+                className="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleSaveChanges}
+                className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+              >
+                Save Changes
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

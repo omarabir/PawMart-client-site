@@ -8,6 +8,7 @@ import AddListing from "../Pages/AddListing";
 import PrivateRoute from "./PrivateRoute";
 import MyListings from "../Pages/MyListing";
 import ListingDetails from "../Pages/ListingDetails";
+import MyOrders from "../Pages/MyOrders";
 
 export const router = createBrowserRouter([
   {
@@ -47,6 +48,15 @@ export const router = createBrowserRouter([
         element: (
           <PrivateRoute>
             <MyListings></MyListings>
+          </PrivateRoute>
+        ),
+        loader: () => fetch("http://localhost:3000/listings"),
+      },
+      {
+        path: "/my-orders",
+        element: (
+          <PrivateRoute>
+            <MyOrders></MyOrders>
           </PrivateRoute>
         ),
       },
