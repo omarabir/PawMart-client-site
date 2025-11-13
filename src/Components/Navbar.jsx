@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { BiMoon } from "react-icons/bi";
 import { PiSun } from "react-icons/pi";
 import { Link, NavLink } from "react-router";
@@ -7,6 +7,19 @@ import toast from "daisyui/components/toast";
 
 const Navbar = () => {
   const { user, signOutUser } = useContext(AuthContext);
+
+  const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
+
+  useEffect(() => {
+    const html = document.querySelector("html");
+    html.setAttribute("data-theme", theme);
+    localStorage.setItem("theme", theme);
+  }, [theme]);
+
+  const handleTheme = (checked) => {
+    setTheme(checked ? "dark" : "light");
+  };
+
   const handleLogout = () => {
     signOutUser()
       .then(() => {
@@ -123,7 +136,11 @@ const Navbar = () => {
 
       <div className="navbar-end gap-2">
         <label className="swap swap-rotate btn btn-ghost btn-circle">
-          <input type="checkbox" />
+          <input
+            onChange={(e) => handleTheme(e.target.checked)}
+            defaultChecked={localStorage.getItem("theme") === "dark"}
+            type="checkbox"
+          />
           <PiSun className="swap-on fill-current w-5 h-5" />
           <BiMoon className="swap-off fill-current w-5 h-5" />
         </label>
