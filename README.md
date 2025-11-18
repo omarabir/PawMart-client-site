@@ -12,6 +12,29 @@ Welcome to PawMart, your one-stop online destination for all things pets! Whethe
 - **Expert Advice:** Access a wealth of informative articles and guides on pet care, training tips, and health advice from our team of veterinary experts.
 - **Secure Shopping:** Enjoy a safe and seamless shopping experience with our encrypted payment gateway and hassle-free returns policy.
 
+
+```
+"dependencies": {
+    "@tailwindcss/vite": "^4.1.17",
+    "daisyui": "^5.4.7",
+    "firebase": "^12.5.0",
+    "framer-motion": "^12.23.24",
+    "jspdf": "^3.0.3",
+    "jspdf-autotable": "^5.0.2",
+    "lucide": "^0.553.0",
+    "motion": "^12.23.24",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "react-hot-toast": "^2.6.0",
+    "react-icons": "^5.5.0",
+    "react-router": "^7.9.5",
+    "react-simple-typewriter": "^5.0.1",
+    "react-spinners": "^0.17.0",
+    "sweetalert2": "^11.26.3",
+    "sweetalert2-react-content": "^5.1.0",
+    "tailwindcss": "^4.1.17"
+```
+
 ## Technologies Used
 
 - React
