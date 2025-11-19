@@ -48,7 +48,7 @@ Welcome to PawMart, your one-stop online destination for all things pets! Whethe
 * Clone the project
 
   ```
-  git clone https://github.com/your-username/pawmart.git
+  git clone https://github.com/omarabir/PawMart-client-site.git
   ```
 
 * Go to the project folder
