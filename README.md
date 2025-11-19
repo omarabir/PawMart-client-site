@@ -1,17 +1,16 @@
 # PawMart - Your Pet's Paradise
 
-## Live Site URL: https://pawmart2.netlify.app/
+## Live Site URL: [https://pawmart2.netlify.app/](https://pawmart2.netlify.app/)
 
 Welcome to PawMart, your one-stop online destination for all things pets! Whether you're a proud dog parent, a cat enthusiast, or have a soft spot for smaller critters, we've got everything you need to keep your furry, scaly, or feathered friends happy and healthy.
 
 ## Features
 
-- **Extensive Product Range:** Browse through thousands of products, from premium pet food and stylish apparel to cozy beds and interactive toys.
-- **Trusted Brands:** We partner with top-rated brands to ensure your pet receives only the best in quality and care.
-- **Community Marketplace:** Connect with other pet lovers! Buy, sell, or adopt pets and supplies within our secure and friendly community.
-- **Expert Advice:** Access a wealth of informative articles and guides on pet care, training tips, and health advice from our team of veterinary experts.
-- **Secure Shopping:** Enjoy a safe and seamless shopping experience with our encrypted payment gateway and hassle-free returns policy.
-
+* **Extensive Product Range:** Browse through thousands of products, from premium pet food and stylish apparel to cozy beds and interactive toys.
+* **Trusted Brands:** We partner with top-rated brands to ensure your pet receives only the best in quality and care.
+* **Community Marketplace:** Connect with other pet lovers! Buy, sell, or adopt pets and supplies within our secure and friendly community.
+* **Expert Advice:** Access a wealth of informative articles and guides on pet care, training tips, and health advice from our team of veterinary experts.
+* **Secure Shopping:** Enjoy a safe and seamless shopping experience with our encrypted payment gateway and hassle-free returns policy.
 
 ```
 "dependencies": {
@@ -33,13 +32,58 @@ Welcome to PawMart, your one-stop online destination for all things pets! Whethe
     "sweetalert2": "^11.26.3",
     "sweetalert2-react-content": "^5.1.0",
     "tailwindcss": "^4.1.17"
+}
 ```
 
 ## Technologies Used
 
-- React
-- Vite
-- tailwindcss,daisyUi
-- Firebase
-- MongoDB
+* React
+* Vite
+* tailwindcss, daisyUi
+* Firebase
+* MongoDB
 
+## How to Run Locally
+
+* Clone the project
+
+  ```
+  git clone https://github.com/your-username/pawmart.git
+  ```
+
+* Go to the project folder
+
+  ```
+  cd pawmart
+  ```
+
+* Install dependencies
+
+  ```
+  npm install
+  ```
+
+* Create `.env` file in the project root and add:
+
+  ```
+  VITE_apiKey=your_api_key
+  VITE_authDomain=your_auth_domain
+  VITE_projectId=your_project_id
+  VITE_storageBucket=your_storage_bucket
+  VITE_messagingSenderId=your_message_sender_id
+  VITE_appId=your_app_id
+
+  VITE_SERVER_URL=http://localhost:5000
+  ```
+
+* Start the development server
+
+  ```
+  npm run dev
+  ```
+
+* Now open in browser
+
+  ```
+  http://localhost:5173/
+  ```
