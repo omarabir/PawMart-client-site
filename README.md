@@ -7,7 +7,6 @@ Welcome to PawMart, your one-stop online destination for all things pets! Whethe
 
 ## Features
 
-<<<<<<< HEAD
 - **Extensive Product Range:** Browse through thousands of products, from premium pet food and stylish apparel to cozy beds and interactive toys.
 - **Trusted Brands:** We partner with top-rated brands to ensure your pet receives only the best in quality and care.
 - **Community Marketplace:** Connect with other pet lovers! Buy, sell, or adopt pets and supplies within our secure and friendly community.
@@ -104,4 +103,3 @@ To get started with the project, clone the repository and run `npm install` to i
   ```
   http://localhost:5173/
   ```
->>>>>>> c10aecb474b7536d1f29c9846e8cf665a12495de
