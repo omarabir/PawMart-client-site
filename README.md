@@ -1,6 +1,5 @@
 # PawMart - Your Pet's Paradise
 
-<<<<<<< HEAD
 ## Live Site URL: [https://pawmart-client-site.web.app/](https://pawmart-client-site.web.app/)
 
 
