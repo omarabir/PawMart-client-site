@@ -5,7 +5,7 @@ import { Link, NavLink } from "react-router";
 import { AuthContext } from "../Context/AuthContext";
 import toast from "daisyui/components/toast";
 import { BeatLoader } from "react-spinners";
-
+import logo from "../assets/logo.png";
 const Navbar = () => {
   const { user, signOutUser, loading } = useContext(AuthContext);
   const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
@@ -32,7 +32,7 @@ const Navbar = () => {
           className={({ isActive }) =>
             isActive
               ? "text-[#FE7F73] font-semibold"
-              : "hover:text-[#FE7F73] transition"
+              : "hover:text-[#FE7F73] transition-colors duration-200"
           }
         >
           Home
@@ -44,52 +44,36 @@ const Navbar = () => {
           className={({ isActive }) =>
             isActive
               ? "text-[#FE7F73] font-semibold"
-              : "hover:text-[#FE7F73] transition"
+              : "hover:text-[#FE7F73] transition-colors duration-200"
           }
         >
           Pets & Supplies
         </NavLink>
       </li>
-      {user && (
-        <>
-          <li>
-            <NavLink
-              to="/add-listing"
-              className={({ isActive }) =>
-                isActive
-                  ? "text-[#FE7F73] font-semibold"
-                  : "hover:text-[#FE7F73] transition"
-              }
-            >
-              Add Listing
-            </NavLink>
-          </li>
-          <li>
-            <NavLink
-              to="/my-listings"
-              className={({ isActive }) =>
-                isActive
-                  ? "text-[#FE7F73] font-semibold"
-                  : "hover:text-[#FE7F73] transition"
-              }
-            >
-              My Listings
-            </NavLink>
-          </li>
-          <li>
-            <NavLink
-              to="/my-orders"
-              className={({ isActive }) =>
-                isActive
-                  ? "text-[#FE7F73] font-semibold"
-                  : "hover:text-[#FE7F73] transition"
-              }
-            >
-              My Orders
-            </NavLink>
-          </li>
-        </>
-      )}
+      <li>
+        <NavLink
+          to="/about"
+          className={({ isActive }) =>
+            isActive
+              ? "text-[#FE7F73] font-semibold"
+              : "hover:text-[#FE7F73] transition-colors duration-200"
+          }
+        >
+          About
+        </NavLink>
+      </li>
+      <li>
+        <NavLink
+          to="/contact"
+          className={({ isActive }) =>
+            isActive
+              ? "text-[#FE7F73] font-semibold"
+              : "hover:text-[#FE7F73] transition-colors duration-200"
+          }
+        >
+          Contact
+        </NavLink>
+      </li>
     </>
   );
 
@@ -100,19 +84,12 @@ const Navbar = () => {
           Login
         </Link>
       </li>
-      <li>
-        <Link to="/register" className="btn bg-[#FE7F73] text-white w-full">
-          Register
-        </Link>
-      </li>
     </>
   );
 
   return (
-    <div className="navbar bg-base-100 shadow-md px-4 sticky top-0 z-50 mb-10">
-      {/* Navbar Start */}
+    <div className="navbar bg-base-100/95 backdrop-blur-md shadow-lg px-4 lg:px-4 sticky top-0 z-50 mb-10 border-b border-base-200">
       <div className="navbar-start">
-        {/* Mobile Dropdown */}
         <div className="dropdown">
           <label tabIndex={0} className="btn btn-ghost lg:hidden">
             <svg
@@ -140,40 +117,41 @@ const Navbar = () => {
           </ul>
         </div>
 
-        {/* Logo */}
         <Link
           to="/"
-          className="btn btn-ghost normal-case text-xl font-bold text-primary"
+          className=" normal-case text-xl lg:text-2xl font-bold text-primary hover:bg-transparent"
         >
-          <p className="text-[#FE7F73]">PawMart</p>
+          <span className="text-[#FE7F73] flex items-center gap-2">
+            <img className="w-14" src={logo} alt="PawMart Logo" />
+            PawMart
+          </span>
         </Link>
       </div>
 
-      {/* Navbar Center - Desktop */}
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1 text-lg">{navLinks}</ul>
       </div>
 
-      {/* Navbar End */}
       <div className="navbar-end gap-2">
-        {/* Theme Toggle */}
-        <label className="swap swap-rotate btn btn-ghost btn-circle">
+        <label className="swap swap-rotate btn btn-ghost btn-circle hover:bg-base-200 transition-colors">
           <input
             onChange={(e) => handleTheme(e.target.checked)}
             defaultChecked={theme === "dark"}
             type="checkbox"
           />
-          <PiSun className="swap-on fill-current w-5 h-5" />
-          <BiMoon className="swap-off fill-current w-5 h-5" />
+          <PiSun className="swap-on fill-current w-6 h-6 text-yellow-500" />
+          <BiMoon className="swap-off fill-current w-6 h-6 text-[#FE7F73] " />
         </label>
 
-        {/* User/Login */}
         {loading ? (
-          <BeatLoader />
+          <BeatLoader color="#FE7F73" size={10} />
         ) : user ? (
           <div className="dropdown dropdown-end">
-            <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
-              <div className="w-10 rounded-full">
+            <label
+              tabIndex={0}
+              className="btn btn-ghost btn-circle avatar hover:ring-2 hover:ring-[#FE7F73] hover:ring-offset-2 transition-all"
+            >
+              <div className="w-10 rounded-full ring-2 ring-offset-2 ring-base-200">
                 <img
                   src={
                     user.photoURL || `https://i.pravatar.cc/150?u=${user.uid}`
@@ -182,32 +160,101 @@ const Navbar = () => {
                 />
               </div>
             </label>
-            <ul
+            <div
               tabIndex={0}
-              className="menu menu-sm dropdown-content mt-3 py-4 px-5 shadow bg-base-100 rounded-box w-52"
+              className="dropdown-content mt-3 w-72 bg-base-100 rounded-2xl shadow-2xl border border-base-200 overflow-hidden"
             >
-              <li className="font-semibold">
-                Name: {user.displayName || "Profile"}
-              </li>
-              <li className="my-2">Email: {user.email}</li>
-              <li className="text-center">
-                <button
-                  onClick={handleLogout}
-                  className="btn bg-[#FE7F73] text-center w-full"
-                >
-                  Logout
-                </button>
-              </li>
-            </ul>
+              {/* User Info Header */}
+              <div className="bg-gradient-to-r from-[#FE7F73] to-orange-500 p-4 text-white">
+                <div className="flex items-center gap-3">
+                  <div className="avatar">
+                    <div className="w-12 rounded-full ring-2 ring-white">
+                      <img
+                        src={
+                          user.photoURL ||
+                          `https://i.pravatar.cc/150?u=${user.uid}`
+                        }
+                        alt="User avatar"
+                      />
+                    </div>
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="font-bold text-base truncate">
+                      {user.displayName || "User"}
+                    </p>
+                    <p className="text-sm opacity-90 truncate">{user.email}</p>
+                  </div>
+                </div>
+              </div>
+
+              <ul className="menu p-3 gap-1">
+                <li>
+                  <NavLink
+                    to="/dashboard"
+                    className="rounded-lg hover:bg-[#FE7F73] hover:text-white transition-colors"
+                  >
+                    <svg
+                      className="w-5 h-5"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"
+                      />
+                    </svg>
+                    <span className="font-semibold">Dashboard</span>
+                  </NavLink>
+                </li>
+                <div className="divider my-1"></div>
+                <li>
+                  <button
+                    onClick={handleLogout}
+                    className="rounded-lg hover:bg-red-500 hover:text-white transition-colors text-red-600 dark:text-red-400 font-semibold"
+                  >
+                    <svg
+                      className="w-5 h-5"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                      />
+                    </svg>
+                    <span>Logout</span>
+                  </button>
+                </li>
+              </ul>
+            </div>
           </div>
         ) : (
           // Desktop Login/Register Buttons
           <>
-            <Link to="/login" className="btn btn-outline btn-error">
+            <Link
+              to="/login"
+              className="btn btn-outline btn-error hover:bg-red-500 hover:border-red-500 transition-all"
+            >
+              <svg
+                className="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"
+                />
+              </svg>
               Login
-            </Link>
-            <Link to="/register" className="btn bg-[#FE7F73] text-white">
-              Register
             </Link>
           </>
         )}
