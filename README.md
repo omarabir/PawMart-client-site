@@ -1,6 +1,6 @@
 # PawMart - Your Pet's Paradise
 
-## Live Site URL: [https://pawmart-client-site.web.app/](https://pawmart-client-site.web.app/)
+## Live Site URL: [https://pawmart2.netlify.app]
 
 
 Welcome to PawMart, your one-stop online destination for all things pets! Whether you're a proud dog parent, a cat enthusiast, or have a soft spot for smaller critters, we've got everything you need to keep your furry, scaly, or feathered friends happy and healthy.
